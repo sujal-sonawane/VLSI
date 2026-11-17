@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module tb_binary_to_gray;
 
 reg [2:0] b;
