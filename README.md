@@ -20,4 +20,4 @@ Corrected Verilog source files are organized under `experiments/`. Each experime
 | 3-bit down counter | `bit3_downcounter` | `tb_3bit_downcounter` |
 | 4-bit SISO register | `siso_shift_register` | `tb_siso_shift_reg` |
 
-Counters use active-high asynchronous reset and count on the positive clock edge. Testbench inputs are driven away from the active edge to avoid race conditions.
+Counters use active-high asynchronous reset. The up counter updates on the positive clock edge; the down counter preserves the original negative-edge behavior. Testbench inputs are driven away from the active edge to avoid race conditions.
