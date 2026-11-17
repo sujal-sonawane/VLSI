@@ -1,0 +1,109 @@
+A.	Design Module
+module dff (
+    input d,
+    input clk,
+    input rst,
+    output reg q
+);
+
+always @(posedge clk or posedge rst)
+begin
+    if (rst)
+        q <= 1'b0;
+    else
+        q <= d;
+end
+
+endmodule
+module siso_shift_register (
+    input clk,
+    input rst,
+    input serial_in,
+    output serial_out
+);
+wire q1, q2, q3, q4;
+
+dff ff1 (
+    .clk(clk),
+    .rst(rst),
+    .d(serial_in),
+    .q(q1)
+);
+
+dff ff2 (
+    .clk(clk),
+    .rst(rst),
+    .d(q1),
+    .q(q2)
+);
+dff ff3 (
+    .clk(clk),
+    .rst(rst),
+    .d(q2),
+    .q(q3)
+);
+dff ff4 (
+    .clk(clk),
+    .rst(rst),
+    .d(q3),
+    .q(q4)
+);
+assign serial_out = q4;
+
+endmodule
+
+
+
+
+
+
+B.	Testbench
+
+module tb_siso_shift_reg;
+
+reg clk;
+reg rst;
+reg serial_in;
+
+wire serial_out;
+
+siso_shift_register uut (
+    .clk(clk),
+    .rst(rst),
+    .serial_in(serial_in),
+    .serial_out(serial_out)
+);
+
+// Clock generation
+always #5 clk = ~clk;
+
+initial
+begin
+    clk = 1'b0;
+    rst = 1'b1;
+    serial_in = 1'b0;
+
+    #10;
+    rst = 1'b0;
+
+    #5 serial_in = 1'b1;
+
+    #10 serial_in = 1'b0;
+    #10 serial_in = 1'b1;
+    #10 serial_in = 1'b1;
+    #10 serial_in = 1'b0;
+    #10 serial_in = 1'b0;
+    #10 serial_in = 1'b0;
+
+    #30;
+    $finish;
+end
+
+// Monitor output
+initial
+begin
+    $monitor("Time=%0t | clk=%b | rst=%b | serial_in=%b | serial_out=%b",
+             $time, clk, rst, serial_in, serial_out);
+end
+
+endmodule
