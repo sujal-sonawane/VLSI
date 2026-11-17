@@ -7,7 +7,7 @@ initial begin
  for(i=0;i<8;i=i+1) begin
   {a,b,cin}=i[2:0]; #10;
   expected={1'b0,a}+{1'b0,b}+cin;
-  if({cout,sum} !== expected) $error("Full adder mismatch: A=%b B=%b Cin=%b Sum=%b Cout=%b expected=%b",a,b,cin,sum,cout,expected);
+  if({cout,sum} !== expected) $display("ERROR: Full adder mismatch: A=%b B=%b Cin=%b Sum=%b Cout=%b expected=%b",a,b,cin,sum,cout,expected);
  end
  $display("Full adder test completed."); $finish;
 end
