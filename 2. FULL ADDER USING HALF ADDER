@@ -1,0 +1,70 @@
+module half_adder(
+    input a, b,
+    output sum, carry
+);
+
+assign sum = a ^ b;
+assign carry = a & b;
+
+endmodule
+
+
+module full_adder(
+    input a, b, cin,
+    output sum, cout
+);
+
+wire s1, c1, c2;
+
+// First Half Adder
+half_adder HA1(a, b, s1, c1);
+
+// Second Half Adder
+half_adder HA2(s1, cin, sum, c2);
+
+// Final Carry
+assign cout = c1 | c2;
+
+endmodule
+
+
+
+
+
+
+TESTBENCH MODULE
+module tb_full_adder;
+
+reg a, b, cin;
+wire sum, cout;
+
+// Instantiate Full Adder
+full_adder uut(
+    .a(a),
+    .b(b),
+    .cin(cin),
+    .sum(sum),
+    .cout(cout)
+);
+
+initial begin
+
+    // Test all input combinations
+    a=0; b=0; cin=0; #10;
+    a=0; b=0; cin=1; #10;
+    a=0; b=1; cin=0; #10;
+    a=0; b=1; cin=1; #10;
+    a=1; b=0; cin=0; #10;
+    a=1; b=0; cin=1; #10;
+    a=1; b=1; cin=0; #10;
+    a=1; b=1; cin=1; #10;
+
+    $finish;
+end
+
+initial begin
+    $monitor("A=%b B=%b Cin=%b Sum=%b Cout=%b",
+              a, b, cin, sum, cout);
+end
+
+endmodule
