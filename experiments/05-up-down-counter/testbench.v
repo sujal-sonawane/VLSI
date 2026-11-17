@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module tb_3bit_upcounter;
 
 reg t, clk, rst;
