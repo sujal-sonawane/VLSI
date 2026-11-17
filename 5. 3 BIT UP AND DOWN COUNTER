@@ -1,0 +1,97 @@
+DESIGN MODULE FOR 3 BIT UP COUNTER
+module bit3_upcounter (
+    input t,
+    input clk,
+    input rst,
+    output reg [2:0] q
+);
+always @(posedge clk or posedge rst)
+begin
+    if (rst)
+        q <= 3'b000;
+    else if (t)
+        q <= q + 1'b1;
+end
+endmodule
+
+
+TESTBENCH FOR 3 BIT UP COUNTER
+module tb_3bit_upcounter
+reg t, clk, rst;
+wire [2:0] q;
+bit3_upcounter uut (
+    .t(t),
+    .clk(clk),
+    .rst(rst),
+    .q(q)
+);
+// Clock generation
+always #5 clk = ~clk;
+initial
+begin
+    clk = 0;
+    rst = 1;
+    t = 1;
+    #10 rst = 0
+    #100 $finish;
+end
+initial
+begin
+    $monitor("Time=%0t rst=%b clk=%b t=%b q=%b",
+             $time, rst, clk, t, q);
+end
+
+endmodule
+
+
+
+
+
+
+DESIGN MODULE FOR 3 BIT DOWN COUNTER
+module bitasync3 (
+    input t,
+    input clk,
+    input rst,
+    output reg [2:0] q
+);
+always @(negedge clk or posedge rst)
+begin
+    if (rst)
+        q <= 3'b111;
+    else if (t)
+        q <= q - 1'b1;
+end
+endmodule
+
+
+TESTBENCH FOR 3 BIT DOWN COUNTER
+module tb3bitasync;
+reg t, clk, rst;
+wire [2:0] q;
+
+bitasync3 uut (
+    .t(t),
+    .clk(clk),
+    .rst(rst),
+    .q(q)
+);
+
+// Clock generation
+always #5 clk = ~clk;
+
+initial
+begin
+    $display("t rst clk | q");
+    $monitor("%b %b %b | %b", t, rst, clk, q);
+    clk = 0;
+    rst = 1;
+    t = 1
+    #10 rst = 0;
+    #100;
+    $finish;
+end
+
+endmodule 
+
+
